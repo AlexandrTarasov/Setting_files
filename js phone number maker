@@ -1,0 +1,16 @@
+
+function make_number(){
+    var val = document.getElementById("phone").value;
+    if(val.length == 3 || val.length == 7 || val.length == 10 ){
+        val=val+'-';
+        document.getElementById("phone").value = val;
+    }
+    if(val.length > 13 ){
+        val = val.slice(0, 13);
+        document.getElementById("phone").value = val;
+    }
+    
+}
+
+<input type="tel" name="tel" class="form-control" pattern="[0][0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}" value="095-000-00-00" 
+ id="phone" title="№ Начинается с 0 и содержит 10 цифр" onkeyup="make_number()" onclick="res()">
