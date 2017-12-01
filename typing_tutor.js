@@ -21,7 +21,7 @@
 
 </head>
 <body class="body">
-	<div class="main" aria-live="polite" aria-atomic="true"><div class="left" id="l">&#9998;</div><input class="right" id="r" value="" ></div>
+	<div class="main" aria-live="polite"  aria-atomic="true"><div class="left" id="l">&#9998;</div><input class="right" id="r" value="" ></div>
 </body>
 <script>
 
@@ -35,7 +35,7 @@ let typo_amout=0;
 
 right_str = document.getElementById("r").value  = right_input[0]
 
-$( ".right" ).keypress(function() {
+$( ".right" ).keypress(function(event) {
 	
 	event.preventDefault(); //prevent defult 
   char = event.key;	
@@ -47,7 +47,8 @@ $( ".right" ).keypress(function() {
 		  
 		  buffer = right_str.charAt(0);
 		  right_str = right_str.slice(1);
-		  left_div= left_div+buffer; 
+		  left_div = left_div+buffer;
+		  	if(left_div.length>27){left_div = left_div.slice(1);} 
 		  document.getElementById("r").value = right_str;
 		  document.getElementById("l").innerHTML = left_div;
 		}
