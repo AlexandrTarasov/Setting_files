@@ -24,31 +24,31 @@
 
 
 var left_div  = [];
-var right_div = ["B", "s", " ", "l"];
+var right_div = ["Im", "want", "lear", "english", 'and', 'now', 'it', 'advansed'];
 let buffer = '';
 let char = '';
 
 
 
-document.getElementById("r").innerHTML = right_div.join('');
+document.getElementById("r").innerHTML = right_div.join(' ');
 
 $( ".right" ).keypress(function() {
 	
 	event.preventDefault(); //prevent defult 
   char = event.key;	
 
-  document.getElementById("r").innerHTML = right_div.join('');
   
-  if(char == right_div[0]){
-	  if(right_div.length>0){
+  
+	if(right_div.length>0){
+  	if(char == right_div[0]){
 		  buffer = right_div.shift();
 		  left_div.push(buffer); 
-		  document.getElementById("r").innerHTML = right_div;
-		  document.getElementById("l").innerHTML = left_div.join('');
+		  document.getElementById("r").innerHTML = right_div.join(' ');
+		  document.getElementById("l").innerHTML = left_div.join(' ');
 		}
-		else{alert("Усё напечатал");}
+		else{ alert("Ошибка"); }
 	}
-	else{ alert("Ошибка"); }
+	else{alert("Усё напечатал");}
 		
 	console.log(char+" and "+buffer);	
 	
@@ -60,6 +60,3 @@ $( ".right" ).keypress(function() {
 </script>
 
 </html>
-
-
-
