@@ -60,7 +60,7 @@
 			</div>
 			<div class="col-9">Progress:
 				<div class="progress" style="height: 20px;">
-  				<div class="progress-bar progress-bar-striped" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div>
+  				<div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">25%</div>
 				</div>
 			</div>
 		</div>
@@ -78,15 +78,20 @@ let typo_amout = 0;
 let counter = 0;
 let length_of_string = 0;
 let newprogress = 0;
+let procentage_in_bar = 0;
 
 
 right_str = document.getElementById("r").value  = right_input[0]
 length_of_string = right_str.length;
 
 $( ".right" ).keypress(function(event) {
-
 	
-	$('.progress-bar').attr('aria-valuenow', newprogress).css('width',newprogress);
+	newprogress = 100/length_of_string * counter;
+
+	procentage_in_bar = (newprogress).toFixed(1);
+
+	$('.progress-bar').attr('aria-valuenow', newprogress).css('width',newprogress+'%');
+	$('.progress-bar').text(procentage_in_bar+'%');
 	
 	event.preventDefault(); //prevent default action (doens't set characters) 
 	char = event.key;	
