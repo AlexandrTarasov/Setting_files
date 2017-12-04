@@ -24,18 +24,7 @@
 
 </head>
 <body class="body">
-
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
-      <a class="navbar-brand" href="#">Tarasov Learn English</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">Main <span class="sr-only">(current)</span></a>
-          </li>
-          <li class="nav-item">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4"> <a class="navbar-brand" href="#">Tarasov Learn English</a> <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button> <div class="collapse navbar-collapse" id="navbarCollapse"> <ul class="navbar-nav mr-auto"> <li class="nav-item active"> <a class="nav-link" href="#">Main <span class="sr-only">(current)</span></a> </li> <li class="nav-item">
             <a class="nav-link" href="#">Your texts</a>
           </li>
           <li class="nav-item">
@@ -57,21 +46,38 @@
 		<div class="row">
 			<div class="col-3">
 				<div class="alert alert-success" style="width: 160px;" role="alert">Нажмакано: <span id="counterDiv"></span></div>
+				<div class="alert alert-success" style="width: 160px;" role="alert">Время: <span id="timeDiv"></span></div>
 			</div>
 			<div class="col-9">Progress:
 				<div class="progress" style="height: 20px;">
-  				<div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">25%</div>
+  				<div class="progress-bar progress-bar-striped" role="progressbar" style="width: 0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
+				
 				</div>
+				<form>
+					<div class="form-control"><label for="exampleFormControlFile1">Download your own file with text</label>
+								<input type=file class="form-control-file"> 
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
 	<div class="main" aria-live="polite"  aria-atomic="true"><div class="left" id="l">&#9998;</div><input class="right" id="r" value="" ></div>
+	<div class="container">
+		<div class="card">
+  		<div class="card-header">Luggage:</div>
+  			<div class="card-body">
+   				<a href="#">Irregular Verbs</a> / <a href="#">Top 1500 Nouns (part 1)</a> / <a href="#">Top 1500 Nouns (part 2)</a> / <a href="#">The most common nouns</a> / 
+   				<a href="#">Irregular Verbs</a> / <a href="#">fifty fruit</a> / <a href="#">The most common verbs</a> / <a href="#">The most common nouns</a>
+  			</div>
+		</div>
+	</div>
+	</div>
 </body>
 <script>
 
 let right_str = '';
-var left_div  = '';
-var right_input = ["I want learn English to advanced level"];
+let left_div  = '';
+let right_input = ["I want strict"];
 let buffer = '';
 let char = '';
 let typo_amout = 0;
@@ -79,15 +85,20 @@ let counter = 0;
 let length_of_string = 0;
 let newprogress = 0;
 let procentage_in_bar = 0;
+let finish = []; 
 
+
+//document.getElementById('timeDiv').innerHTML = now;
 
 right_str = document.getElementById("r").value  = right_input[0]
 length_of_string = right_str.length;
 
 $( ".right" ).keypress(function(event) {
 	
-	newprogress = 100/length_of_string * counter;
+    	
 
+
+	newprogress = 100/length_of_string * counter;
 	procentage_in_bar = (newprogress).toFixed(1);
 
 	$('.progress-bar').attr('aria-valuenow', newprogress).css('width',newprogress+'%');
@@ -99,7 +110,7 @@ $( ".right" ).keypress(function(event) {
   
   
 	if(right_str.length>0){
-  	if(char == right_str.charAt(0)){
+		if(char == right_str.charAt(0)){
 		  
 		  buffer = right_str.charAt(0);
 		  right_str = right_str.slice(1);
@@ -109,14 +120,28 @@ $( ".right" ).keypress(function(event) {
 		  document.getElementById("l").innerHTML = left_div;
 
 		  counter++;
-		  document.getElementById('counterDiv').innerHTML = counter;
-
+		 document.getElementById('counterDiv').innerHTML = counter;
+		 
+		if(counter==1){ finish[0] = Date.now();}
+		finish[1] = Date.now();
+		var res = (finish[1]-finish[0])/1000;
+		res = (res).toFixed(1);
+		
+		document.getElementById('timeDiv').innerHTML = res+' sek.';
+		
 		}
 		else{ alert("Typo"); typo_amout++;}
 	}
-	else{alert("Усё напечатал. Опечаток "+typo_amout);}
+	else{	
+			finish[1]=Date.now();
+			res = ((finish[1]-finish[0])/1000).toFixed(1);
+			//alert("--- "+res+"  sek ---");
+			document.getElementById('timeDiv').innerHTML = res+' sek.';
+
+		alert("Усё напечатал. Опечаток "+typo_amout);
+	}
 		
-	console.log(char+" and "+buffer);	
+	console.log(finish[0]+" and "+finish[1]);	
 	
 
 
