@@ -107,7 +107,8 @@ $( ".right" ).keypress(function(event) {
 	event.preventDefault(); //prevent default action (doens't set characters) 
 	char = event.key;	
 
-  
+  if(char=='Enter'){alert("pausa");}
+
   
 	if(right_str.length>0){
 		if(char == right_str.charAt(0)){
@@ -123,25 +124,21 @@ $( ".right" ).keypress(function(event) {
 		 document.getElementById('counterDiv').innerHTML = counter;
 		 
 		if(counter==1){ finish[0] = Date.now();}
-		finish[1] = Date.now();
-		var res = (finish[1]-finish[0])/1000;
-		res = (res).toFixed(1);
+		if(right_str.length==1){finish[1]=Date.now();}
 		
+		finish[1] = Date.now();
+		var res = ((finish[1]-finish[0])/1000).toFixed(1);	
 		document.getElementById('timeDiv').innerHTML = res+' sek.';
 		
 		}
 		else{ alert("Typo"); typo_amout++;}
 	}
 	else{	
-			finish[1]=Date.now();
-			res = ((finish[1]-finish[0])/1000).toFixed(1);
-			//alert("--- "+res+"  sek ---");
-			document.getElementById('timeDiv').innerHTML = res+' sek.';
 
 		alert("Усё напечатал. Опечаток "+typo_amout);
 	}
 		
-	console.log(finish[0]+" and "+finish[1]);	
+	console.log(char+" current char ");	
 	
 
 
