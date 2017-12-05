@@ -86,7 +86,8 @@ let length_of_string = 0;
 let newprogress = 0;
 let procentage_in_bar = 0;
 let finish = []; 
-
+let pause = false;
+let pause_time_marker = [];
 
 //document.getElementById('timeDiv').innerHTML = now;
 
@@ -107,9 +108,14 @@ $( ".right" ).keypress(function(event) {
 	event.preventDefault(); //prevent default action (doens't set characters) 
 	char = event.key;	
 
-  if(char=='Enter'){alert("Pause. to type on press \"OK\"");}
+  if(char == 'Enter'){
+  	pause_time_marker['start'] =Date.now();
+  	pause = confirm("Pause. Contine typing press \"OK\"");
+  	if(pause == true){pause_time_marker['stop'] = Date.now();}
 
+  }
   else{
+
 		if(right_str.length>0){
 			if(char == right_str.charAt(0)){
 			  
@@ -123,8 +129,8 @@ $( ".right" ).keypress(function(event) {
 			  counter++;
 			 document.getElementById('counterDiv').innerHTML = counter;
 			 
-			if(counter==1){ finish[0] = Date.now();}
-			if(right_str.length==1){finish[1]=Date.now();}
+			if(counter == 1){ finish[0] = Date.now();}
+			if(right_str.length == 1){finish[1] = Date.now();}
 			
 			finish[1] = Date.now();
 			var res = ((finish[1]-finish[0])/1000).toFixed(1);	
