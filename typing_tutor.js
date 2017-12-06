@@ -77,7 +77,7 @@
 
 let right_str = '';
 let left_div  = '';
-let right_input = ["I want strict"];
+let right_input = ["be was were been быть beat beat beaten бить become became become становиться begin began begun начинать bleed bled bled кровоточить blow blew blown дуть break broke broken ломать bring brought brought приносить build built built строить burn burnt burnt гореть burst burst burst разразиться buy bought bought покупать catch caught caught ловить хватать успет choose chose chosen выбирать come came come приходить cost cost cost стоить creep crept crept ползать cut cut cut резат do did done делат draw drew drawn рисовать тащить dream dreamt dreamt мечтать дремать drink drank drunk пить drive drove driven водить eat ate eaten есть fall fell fallen падать feed fed fed кормить feel felt felt чувствовать fight fought fought бороться find found found находить fit fit fit подходить по размеру fly flew flown летать forget forgot forgotten забывать forgive forgave forgiven прощать freeze froze frozen замерзать get got got получать give gave given давать go went gone идти grow grew grown расти hang hung hung вешать have had had иметь hear heard heard слышать hide hid hidden прятать hit hit hit попадать в цель hold held held держать hurt hurt hurt ушибить keep kept kept содержать kneel knelt knelt стоять на коленях know knew known знать lay laid laid класть lead led led вести lean leant leant наклоняться learn learnt learnt учить leave left left оставлять lend lent lent занимать let let let позволять lie lay lain лежать light lit lit освещать lose lost lost терять make made made производить mean meant meant значить"];
 let buffer = '';
 let char = '';
 let typo_amout = 0;
@@ -96,9 +96,6 @@ right_str = document.getElementById("r").value  = right_input[0]
 length_of_string = right_str.length;
 
 $( ".right" ).keypress(function(event) {
-	
-    	
-
 
 	newprogress = 100/length_of_string * counter;
 	procentage_in_bar = (newprogress).toFixed(1);
@@ -116,11 +113,9 @@ $( ".right" ).keypress(function(event) {
   		pause_time['sum'] += pause_time['stop']-pause_time['start'];
   		alert(pause_time['sum']);
   	}
-
   }
   else{
-
-		
+	
 		if(right_str.length>0){
 			if(char == right_str.charAt(0)){
 			  
