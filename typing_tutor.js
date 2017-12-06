@@ -85,9 +85,10 @@ let counter = 0;
 let length_of_string = 0;
 let newprogress = 0;
 let procentage_in_bar = 0;
-let finish = []; 
+let time_of_typing = []; 
 let pause = false;
-let pause_time_marker = [];
+let pause_time = [];
+pause_time['sum'] = 0;
 
 //document.getElementById('timeDiv').innerHTML = now;
 
@@ -109,9 +110,12 @@ $( ".right" ).keypress(function(event) {
 	char = event.key;	
 
   if(char == 'Enter'){
-  	pause_time_marker['start'] =Date.now();
+  	pause_time['start'] = Date.now();
   	pause = confirm("Pause. Contine typing press \"OK\"");
-  	if(pause == true){pause_time_marker['stop'] = Date.now();}
+  	if(pause == true){pause_time['stop'] = Date.now(); 
+  		pause_time['sum'] += pause_time['stop']-pause_time['start'];
+  		alert(pause_time['sum']);
+  	}
 
   }
   else{
@@ -129,11 +133,11 @@ $( ".right" ).keypress(function(event) {
 			  counter++;
 			 document.getElementById('counterDiv').innerHTML = counter;
 			 
-			if(counter == 1){ finish[0] = Date.now();}
-			if(right_str.length == 1){finish[1] = Date.now();}
+			if(counter == 1){ time_of_typing['start'] = Date.now()+pause_time['sum'];}
+			if(right_str.length == 1){time_of_typing[1] = Date.now();}
 			
-			finish[1] = Date.now();
-			var res = ((finish[1]-finish[0])/1000).toFixed(1);	
+			time_of_typing[1] = Date.now();
+			var res = ((time_of_typing[1]-(time_of_typing['start']+pause_time['sum']))/1000).toFixed(1);	
 			document.getElementById('timeDiv').innerHTML = res+' sek.';
 			
 			}
@@ -145,7 +149,7 @@ $( ".right" ).keypress(function(event) {
 		}
 	}
 
-	console.log(char+" current char ");	
+	console.log(right_str.length+" str_lenght ");	
 	
 });
 
