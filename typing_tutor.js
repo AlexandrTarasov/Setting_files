@@ -46,7 +46,7 @@
 		<div class="row">
 			<div class="col-3">
 				<div class="alert alert-success" style="width: 160px;" role="alert">Нажмакано: <span id="counterDiv"></span></div>
-				<div class="alert alert-success" style="width: 160px;" role="alert">Время: <span id="timeDiv"></span></div>
+				<div class="alert alert-success" style="width: 160px;" role="alert">Time: <span id="timeDiv"></span></div>
 			</div>
 			<div class="col-9">Progress:
 				<div class="progress" style="height: 20px;">
@@ -64,10 +64,18 @@
 	<div class="main" aria-live="polite"  aria-atomic="true"><div class="left" id="l">&#9998;</div><input class="right" id="r" value="" ></div>
 	<div class="container">
 		<div class="card">
-  		<div class="card-header">Luggage:</div>
+  		<div class="card-header">Luggage: Verbs</div>
   			<div class="card-body">
-   				<a href="#">Irregular Verbs</a> / <a href="#">Top 1500 Nouns (part 1)</a> / <a href="#">Top 1500 Nouns (part 2)</a> / <a href="#">The most common nouns</a> / 
-   				<a href="#">Irregular Verbs</a> / <a href="#">fifty fruit</a> / <a href="#">The most common verbs</a> / <a href="#">The most common nouns</a>
+   				<a href="#">Irregular verbs TOP № 1</a> | <a href="#">Irregular verbs TOP № 2</a> |
+   				<a href="#">Regular verbs</a> | <a href="#">The most common verbs</a> | <a href="#">The most common nouns</a>
+  			</div>
+		</div>
+			<br/>
+		<div class="card">
+  		<div class="card-header">Luggage: Nouns</div>
+  			<div class="card-body">
+   				<a href="#">Top 1500 Nouns (part 1)</a> / <a href="#">Top 1500 Nouns (part 2)</a> | 
+   				 <a href="#">fifty fruit</a> / <a href="#">The most common nouns</a>
   			</div>
 		</div>
 	</div>
@@ -75,9 +83,10 @@
 </body>
 <script>
 
+let sec = '';
+let minutes = ''; 
 let right_str = '';
 let left_div  = '';
-let right_input = ["be was were been быть beat beat beaten бить become became become становиться begin began begun начинать bleed bled bled кровоточить blow blew blown дуть break broke broken ломать bring brought brought приносить build built built строить burn burnt burnt гореть burst burst burst разразиться buy bought bought покупать catch caught caught ловить хватать успет choose chose chosen выбирать come came come приходить cost cost cost стоить creep crept crept ползать cut cut cut резат do did done делат draw drew drawn рисовать тащить dream dreamt dreamt мечтать дремать drink drank drunk пить drive drove driven водить eat ate eaten есть fall fell fallen падать feed fed fed кормить feel felt felt чувствовать fight fought fought бороться find found found находить fit fit fit подходить по размеру fly flew flown летать forget forgot forgotten забывать forgive forgave forgiven прощать freeze froze frozen замерзать get got got получать give gave given давать go went gone идти grow grew grown расти hang hung hung вешать have had had иметь hear heard heard слышать hide hid hidden прятать hit hit hit попадать в цель hold held held держать hurt hurt hurt ушибить keep kept kept содержать kneel knelt knelt стоять на коленях know knew known знать lay laid laid класть lead led led вести lean leant leant наклоняться learn learnt learnt учить leave left left оставлять lend lent lent занимать let let let позволять lie lay lain лежать light lit lit освещать lose lost lost терять make made made производить mean meant meant значить"];
 let buffer = '';
 let char = '';
 let typo_amout = 0;
@@ -89,8 +98,9 @@ let time_of_typing = [];
 let pause = false;
 let pause_time = [];
 pause_time['sum'] = 0;
+let right_input = ["be was were been быть beat beat beaten бить become became become становиться begin began begun начинать bleed bled bled кровоточить blow blew blown дуть break broke broken ломать bring brought brought приносить build built built строить burn burnt burnt гореть burst burst burst разразиться buy bought bought покупать catch caught caught ловить хватать успет choose chose chosen выбирать come came come приходить cost cost cost стоить creep crept crept ползать cut cut cut резат do did done делат draw drew drawn рисовать тащить dream dreamt dreamt мечтать дремать drink drank drunk пить drive drove driven водить eat ate eaten есть fall fell fallen падать feed fed fed кормить feel felt felt чувствовать fight fought fought бороться find found found находить fit fit fit подходить по размеру fly flew flown летать forget forgot forgotten забывать forgive forgave forgiven прощать freeze froze frozen замерзать get got got получать give gave given давать go went gone идти grow grew grown расти hang hung hung вешать have had had иметь hear heard heard слышать hide hid hidden прятать hit hit hit попадать в цель hold held held держать hurt hurt hurt ушибить keep kept kept содержать kneel knelt knelt стоять на коленях know knew known знать lay laid laid класть lead led led вести lean leant leant наклоняться learn learnt learnt учить leave left left оставлять lend lent lent занимать let let let позволять lie lay lain лежать light lit lit освещать lose lost lost терять make made made производить mean meant meant значить"];
 
-//document.getElementById('timeDiv').innerHTML = now;
+
 
 right_str = document.getElementById("r").value  = right_input[0]
 length_of_string = right_str.length;
@@ -134,27 +144,40 @@ $( ".right" ).keypress(function(event) {
 			if(right_str.length == 1){time_of_typing[1] = Date.now();}
 			
 			time_of_typing[1] = Date.now();
-			var res = ((time_of_typing[1]-(time_of_typing['start']+pause_time['sum']))/1000).toFixed(1);	
-			document.getElementById('timeDiv').innerHTML = res+' sek.';
+			sec = ((time_of_typing[1]-(time_of_typing['start']+pause_time['sum']))/1000);
+
+			minutes = (sec/60);
+
+			if (minutes < 1){
+				minutes = 0; sec = (sec % 60).toFixed(1);
+			} else{
+				minutes = parseInt(minutes); sec = (sec % 60).toFixed(1);
+			}
+
+			document.getElementById('timeDiv').innerHTML = minutes+' min '+sec+' sek.';
 
 			if(right_str==0){ alert("Усё напечатал. Опечаток "+typo_amout); }
 
 			}
-			else{ alert("Typo"); typo_amout++;}
+			else{ 
+				alert("Typo"); 
+				typo_amout++;
+				var audio = new Audio('pig_grants.mp3');
+				audio.play();
+			}
 		}
 		else{	
 
 			alert("Усё напечатал. Опечаток "+typo_amout);
 		}
 	}
-
+	//precentage bar hendler
 	newprogress = 100/length_of_string * counter;
 	procentage_in_bar = (newprogress).toFixed(1);
-
 	$('.progress-bar').attr('aria-valuenow', newprogress).css('width',newprogress+'%');
 	$('.progress-bar').text(procentage_in_bar+'%');
-
-	console.log(right_str.length+" str_lenght ");	
+	//precentage bar hendler end
+	console.log(minutes+" min "+sec+" sec");	
 	
 });
 
