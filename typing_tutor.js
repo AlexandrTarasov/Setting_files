@@ -120,17 +120,19 @@ $( ".right" ).keypress(function(event) {
   }
   else{
 
+		
 		if(right_str.length>0){
 			if(char == right_str.charAt(0)){
 			  
-			  buffer = right_str.charAt(0);
-			  right_str = right_str.slice(1);
-			  left_div = left_div+buffer;
-			  	if(left_div.length>25){left_div = left_div.slice(1);} 
-			  document.getElementById("r").value = right_str;
-			  document.getElementById("l").innerHTML = left_div;
+			buffer = right_str.charAt(0);
+			right_str = right_str.slice(1);
+			left_div = left_div+buffer;
+			  
+			 if(left_div.length>25){left_div = left_div.slice(1);} 
+			 document.getElementById("r").value = right_str;
+			 document.getElementById("l").innerHTML = left_div;
 
-			  counter++;
+			 counter++;
 			 document.getElementById('counterDiv').innerHTML = counter;
 			 
 			if(counter == 1){ time_of_typing['start'] = Date.now()+pause_time['sum'];}
@@ -139,7 +141,9 @@ $( ".right" ).keypress(function(event) {
 			time_of_typing[1] = Date.now();
 			var res = ((time_of_typing[1]-(time_of_typing['start']+pause_time['sum']))/1000).toFixed(1);	
 			document.getElementById('timeDiv').innerHTML = res+' sek.';
-			
+
+			if(right_str==0){ alert("Усё напечатал. Опечаток "+typo_amout); }
+
 			}
 			else{ alert("Typo"); typo_amout++;}
 		}
@@ -148,6 +152,12 @@ $( ".right" ).keypress(function(event) {
 			alert("Усё напечатал. Опечаток "+typo_amout);
 		}
 	}
+
+	newprogress = 100/length_of_string * counter;
+	procentage_in_bar = (newprogress).toFixed(1);
+
+	$('.progress-bar').attr('aria-valuenow', newprogress).css('width',newprogress+'%');
+	$('.progress-bar').text(procentage_in_bar+'%');
 
 	console.log(right_str.length+" str_lenght ");	
 	
