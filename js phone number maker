@@ -1,16 +1,31 @@
+<html>
+<head>
+<body>
+<input id="phone" name="phone" type="tel" title="№ Начинается с 0 и содержит 10 цифр"  value="095-000-00-00" maxlength="13" onfocus="if(this.value=='095-000-00-00') {this.value='';}">
 
-function make_number(){
+<script type="text/javascript">
+
+function makePhoneNumber(event){
+    document.getElementById("phone").addEventListener("keyup", makePhoneNumber);
     var val = document.getElementById("phone").value;
-    if(val.length == 3 || val.length == 7 || val.length == 10 ){
-        val=val+'-';
-        document.getElementById("phone").value = val;
+    let keynum = event.keyCode;
+    if (event.keyCode === 8) {}
+    else
+    {
+        console.log(keynum);
+        if (  ((keynum > 48) && (keynum < 58)) || ((keynum > 96) && (keynum < 105))   ) {
+            if(val.length == 3 || val.length == 7 || val.length == 10 ){
+                val=val+'-';
+                document.getElementById("phone").value = val;
+            }
+        }
+        else
+        {
+            alert("только цифры в номере");
+            document.getElementById("phone").value = val.substring(0, val.length - 1);
+        }
     }
-    if(val.length > 13 ){
-        val = val.slice(0, 13);
-        document.getElementById("phone").value = val;
-    }
-    
 }
-
-<input type="tel" name="tel" class="form-control" pattern="[0][0-9]{2}-[0-9]{3}-[0-9]{2}-[0-9]{2}" value="095-000-00-00" 
- id="phone" title="№ Начинается с 0 и содержит 10 цифр" onkeyup="make_number()" onclick="res()">
+</script>
+</body>
+</html>
