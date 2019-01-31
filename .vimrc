@@ -23,44 +23,57 @@ set shiftwidth=4
 set autoindent 
 set wrap
 set linebreak
-set foldmethod=syntax
+" Smoother changes
+set ttyfast
 set cursorcolumn
-set omnifunc=htmlcomplete#CompleteTags
-set omnifunc=phpcomplete#CompletePHP
 set dictionary+=/usr/share/dict/func
-set dir=~/tmp
-let g:netrw_altv          = 1
-let g:netrw_fastbrowse    = 2
+set noswapfile
+set nobackup
+set directory=/tmp
+set lines=80
+set columns=150
+set filetype=php
+set laststatus=2
+colorscheme wwdc16
+"color dracula
+"
+" let g:netrw_altv          = 1
+" let g:netrw_fastbrowse    = 1
 let g:netrw_keepdir       = 0
 let g:netrw_liststyle     = 3
-let g:netrw_retmap        = 1
+" let g:netrw_retmap        = 1
 let g:netrw_silent        = 1
 let g:netrw_special_syntax= 1
 let g:netrw_browse_split = 20
 " let g:netrw_sort_direction=reverse
-" let g:netrw_winsize = 25
+let g:netrw_winsize = 85
 let g:netrw_ftp_cmd="ftp -p"
 let g:closetag_html_style=1
-let g:netrw_localrmdir='rm -r'
-autocmd VimEnter * source .vim/gp-service.vim 
+" let g:netrw_localrmdir='rm -r'
+"
+let g:gruvbox_contrast_dark = 'dark'
+
+if getcwd() == "/media/alex/1C5036035035E3E4/0-Studying/English/words-phrases"
+	execute 'so Session.vim'
+endif
+if getcwd() == "/home/alex"
+	let g:netrw_list_hide = '^\..*$'
+	autocmd VimEnter * :Ex
+endif
 " augroup ProjectDrawer
 "   autocmd!
 "   autocmd VimEnter * :Vexplore
 " augroup END
 "if version >= 703
-"if exists('+colorcolumn')
-"  set colorcolumn=80
-"endif
+if exists('+colorcolumn')
+ set colorcolumn=80
+endif
 if has("gui_running")
   " GUI is running or is about to start.
   " Maximize gvim window.
   set lines=60 columns=140
 endif
 
-set lines=80
-set columns=150
-set filetype=php
-set laststatus=2
 "set statusline=%f%m%r%h%w\ %y\ enc:%{&enc}\ [:%{&ff}]\ fenc:%{&fenc}%=(ch:%3b\ hex:%2B)\ col:%2c\ line:%2l/%L\ [%2p%%]
 
 
@@ -79,6 +92,10 @@ au InsertLeave * hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 
 " default the statusline to green when entering Vim
 hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
+
+
+" autocmd MyAutoCmd VimLeavePre *  call QuitNetrw()
+
 
 " Formats the statusline
 set statusline=%f                           " file name
@@ -110,11 +127,7 @@ set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor
 let php_sql_query=1
 let php_htmlInStrings=1
 
-colorscheme wwdc16
-"color dracula
 hi Normal ctermbg=black  "no background  in  the terminal vim
-"colorscheme molokai
-"colorscheme desert
 hi Comment guifg=gray30 
 
 "mapping
@@ -126,24 +139,25 @@ nmap <F3> "+gP
 nmap ev :tabedit $MYVIMRC <CR>
 nmap ed :w <CR> :bd <CR> :source $MYVIMRC <CR> 
 nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
-nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
-"nmap <Leader>1 :vertical res 100% <CR> <C-w>l :q <CR>
-nmap <Leader>. 15<C-w>>
-nmap <Leader>.. 55<C-w>>
-nmap <Leader>, 15<C-w><
+" nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
+nmap <Leader>1 :vertical res 100% <CR> <C-w>l :q <CR>
 nmap <Leader>[ :set co-=15<CR>
 nmap <Leader>] :set co+=15<CR>
 imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
-nmap <Leader><Tab> dd<S-o>
 imap ;; <Esc>
 vmap ;; <Esc>
 "buffer only
 nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
-vmap <F12> <C-c>j<S-v>zz 
+vmap <F12> <C-c>j<S-$><S-v>zz
+vmap ;' d<Esc>i'<Esc>pi
+vmap ;" d<Esc>i"<C-c>pi
 imap <leader>w (<Esc>lxea);
 nmap <leader>s <S-%>x<C-o>x 
+nmap <leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi
+nmap vt vf>
+
 imap <leader>; <Esc><S-a>;<Esc>
-imap <leader>c <Esc>yi<<S-$>a</<Esc>pa><Esc><C-%>i<CR><Tab><CR><Esc>k 
+imap <leader>c <Esc>ya><S-$>pa/<Esc>hi<CR><CR><Esc>ki<Tab> 
 map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr> 
@@ -151,13 +165,11 @@ map <F7> <Esc>:DisablePHPFolds<Cr>
 " Split management
 " nnoremap <silent> [b :bprevious<cr>
 " nnoremap <silent> ]b :bnext<cr>
-nmap <silent> <C-k> :exe "resize " . (winheight(0) * 3/2)<CR>
-nmap <silent> <C-j> :exe "resize " . (winheight(0) * 2/3)<CR>
-nmap <silent> <C-h> :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap <silent> <C-l> :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
-
+nmap . :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nmap , :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap <Tab>. <C-w>l
+nmap <Tab>, <C-w>h
 "machine autoritetparts.com.ua login ftpuser password pas
-"
 
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
@@ -167,32 +179,26 @@ Plug 'tomtom/tcomment_vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'StanAngeloff/php.vim'
 "Plug 'jelera/vim-javascript-syntax'
-Plug 'dracula/vim', {'as':'dracula'}
+" Plug 'dracula/vim', {'as':'dracula'}
 Plug 'jwalton512/vim-blade'
 ":PlugInstall
 
-
+" https://github.com/SirVer/ultisnips
 " Initialize plugin system
 call plug#end()
 "after the plugin have installed to apply comand  :source ~/.vimrc
 "and :PlugInstall
 
+map <C-n> :NERDTreeToggle<CR>
 
-" map <C-n> :NERDTreeToggle<CR>
-
-" map <F6> :setlocal spell! spelllang=en_us<CR>
-"inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
+autocmd FileType netrw setl bufhidden=delete
+autocmd FileType php set foldmethod=syntax
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 au BufRead *.html set filetype=htmlm4
-" autocmd FileType html inoremap ;1 <h1></h1><Enter><Enter><++><Esc>2kf<i
-" autocmd FileType html inoremap ;2 <h2></h2><Enter><Enter><++><Esc>2kf<i
-" autocmd FileType html inoremap ;3 <h3></h3><Enter><Enter><++><Esc>2kf<i
-autocmd FileType html,php inoremap ;d <div<Space>class=""></div><Enter><Enter><++><Esc>2kf<i
-" autocmd FileType html,php inoremap ;p <p></p><Enter><Enter><++><Esc>02kf>a
-" autocmd FileType html,php inoremap ;a <a<Space>href=""><++></a><Space><++><Esc>F"i
-" autocmd FileType html,php inoremap ;ul <ul><Enter><li></li><Enter></ul><Enter><Enter><++><Esc>03kf<i
-" autocmd FileType html,php inoremap ;li <Esc>o<li></li><Esc>F>a
-autocmd FileType html,php inoremap <Leader>' echo"</br>";
+autocmd FileType py,html set foldmethod=indent
+autocmd FileType html,php inoremap ;d <div<Space>class=""></div><Esc><S-f><i<CR><CR><BS><Esc>k
+autocmd FileType html,php inoremap ;a <a<Space>href=""><++></a><Space><++><Esc>F"i
 
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
