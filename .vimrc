@@ -1,6 +1,7 @@
 set number
 set relativenumber
 "set expandtab
+set noequalalways
 set tabstop=4
 set guifont=Monospace\ 16px
 set linespace=1
@@ -35,6 +36,7 @@ set columns=150
 set filetype=php
 set laststatus=2
 colorscheme wwdc16
+let g:foo_DefineAutoCommands = 1
 "color dracula
 "
 " let g:netrw_altv          = 1
@@ -46,7 +48,7 @@ let g:netrw_silent        = 1
 let g:netrw_special_syntax= 1
 let g:netrw_browse_split = 20
 " let g:netrw_sort_direction=reverse
-let g:netrw_winsize = 85
+let g:netrw_winsize = 25
 let g:netrw_ftp_cmd="ftp -p"
 let g:closetag_html_style=1
 " let g:netrw_localrmdir='rm -r'
@@ -92,14 +94,77 @@ au InsertLeave * hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 
 " default the statusline to green when entering Vim
 hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
+"
+"---functions
+"
+function! AdjustFontSize(amount)
+  if has("gui") 
+    let font_data_list = split(&guifont)
+	let font_data_list[1] = substitute(font_data_list[1], 'px', '', '')
+	if (a:amount == 2)
+		let font_data_list[1] = font_data_list[1] + 2
+	else
+		let font_data_list[1] = font_data_list[1] - 2
+	endif
+	let newfont = join(font_data_list, " ")
+	let newfont = newfont . "px"
+    let &guifont = newfont
+  else
+    echoerr "You need to run the GTK2 version of Vim to use this function."
+  endif
+endfunction
 
+	
+function! LargerFont()
+  call AdjustFontSize(2)
+endfunction
+command! LargerFont call LargerFont()
+
+function! SmallerFont()
+  call AdjustFontSize(-2)
+endfunction
+command! SmallerFont call SmallerFont()
+
+
+
+if g:foo_DefineAutoCommands
+	augroup Foo
+		autocmd BufEnter *.js imap r r<Esc>:call JS_template()<CR>a
+		autocmd BufLeave *.js iunmap r
+	augroup END
+	autocmd InsertLeave *.php :call PR_fun()
+	
+endif " g:foo_DefineAutoCommands
+fun! JS_template()
+  if getline(".") !~ '<scr$'
+    return
+  endif
+  s/scr$/script language="JavaScript">/
+  append
+  "function foo() {
+      alert("Hello, world.");
+    }
+  </script>
+.
+endfun
+
+fun! PR_fun()
+	if matchstr(getline("."), "pr-f") == 'pr-f'
+		execute "normal d1"
+	endif
+	if matchstr(getline("."), "pu-f") == 'pu-f'
+		execute "normal d2"
+	endif
+	if matchstr(getline("."), "pu-cf") == 'pu-cf'
+		execute "normal d3"
+	endif
+endfun
 
 " autocmd MyAutoCmd VimLeavePre *  call QuitNetrw()
+1
 
-
-" Formats the statusline
-set statusline=%f                           " file name
-set statusline+=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
+"-- statuslineconfit
+set statusline=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
 set statusline+=%{&ff}] "file format
 set statusline+=%y      "filetype
 set statusline+=%h      "help file flag
@@ -109,7 +174,10 @@ set statusline+=\ %=                        " align left
 set statusline+=Line:%l/%L[%p%%]            " line X of Y [percent of file]
 set statusline+=\ Col:%c                    " current column
 set statusline+=\ Buf:%n                    " Buffer number
-set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor    
+set statusline+=%#todo#                    " swithc to todo highlight
+set statusline+=\♦%f                           " file name
+" set statusline+=\ [%b][0x%B]\               " ASCII and byte code under cursor    
+" full settings here http://got-ravings.blogspot.com/2008/08/vim-pr0n-making-statuslines-that-own.html
 " Puts in the current git status
 " if count(g:pathogen_disabled, 'Fugitive') < 1
 " 	set statusline+=%{fugitive#statusline()}
@@ -129,8 +197,9 @@ let php_htmlInStrings=1
 
 hi Normal ctermbg=black  "no background  in  the terminal vim
 hi Comment guifg=gray30 
+hi Search guibg=red guifg=black
 
-"mapping
+"--mapping
 
 vmap <F2> "+y
 vmap <F3> "+gP
@@ -140,21 +209,23 @@ nmap ev :tabedit $MYVIMRC <CR>
 nmap ed :w <CR> :bd <CR> :source $MYVIMRC <CR> 
 nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
 " nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
-nmap <Leader>1 :vertical res 100% <CR> <C-w>l :q <CR>
+nmap <Leader>1 <C-w>l:q<CR>
 nmap <Leader>[ :set co-=15<CR>
 nmap <Leader>] :set co+=15<CR>
 imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
 imap ;; <Esc>
 vmap ;; <Esc>
 "buffer only
-nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
-vmap <F12> <C-c>j<S-$><S-v>zz
+" nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
+vmap <F12> <C-c>j<S-$>v<S-^><F2><S-v>zz
 vmap ;' d<Esc>i'<Esc>pi
 vmap ;" d<Esc>i"<C-c>pi
 imap <leader>w (<Esc>lxea);
 nmap <leader>s <S-%>x<C-o>x 
-nmap <leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi
+nmap <leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
+"above delete next similar character e.g. "
 nmap vt vf>
+
 
 imap <leader>; <Esc><S-a>;<Esc>
 imap <leader>c <Esc>ya><S-$>pa/<Esc>hi<CR><CR><Esc>ki<Tab> 
@@ -162,15 +233,18 @@ map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr> 
 "add the same close tab
-" Split management
+" Split management>
 " nnoremap <silent> [b :bprevious<cr>
 " nnoremap <silent> ]b :bnext<cr>
-nmap . :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap , :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
-nmap <Tab>. <C-w>l
-nmap <Tab>, <C-w>h
+nmap 2l :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
+nmap 2j :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap <Tab>l <C-w>l
+nmap <Tab>h <C-w>h
+nmap <A-=> :LargerFont<CR>
+nmap <A--> :SmallerFont<CR>
 "machine autoritetparts.com.ua login ftpuser password pas
-
+"nunmap .
+"nunmap ,
 
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
@@ -186,21 +260,24 @@ Plug 'jwalton512/vim-blade'
 " https://github.com/SirVer/ultisnips
 " Initialize plugin system
 call plug#end()
-"after the plugin have installed to apply comand  :source ~/.vimrc
-"and :PlugInstall
+"after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 
 map <C-n> :NERDTreeToggle<CR>
 
-autocmd FileType netrw setl bufhidden=delete
+autocmd FileType netrw set bufhidden=delete
 autocmd FileType php set foldmethod=syntax
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 au BufRead *.html set filetype=htmlm4
-autocmd FileType py,html set foldmethod=indent
+autocmd FileType python,html setlocal foldmethod=indent
 autocmd FileType html,php inoremap ;d <div<Space>class=""></div><Esc><S-f><i<CR><CR><BS><Esc>k
 autocmd FileType html,php inoremap ;a <a<Space>href=""><++></a><Space><++><Esc>F"i
+autocmd FileType php nmap d1 ccprivate function my(){<CR>}<Esc>k
+autocmd FileType php nmap d2 ccpublic function my(){<CR>}<Esc>ki<Tab><Tab>
+autocmd FileType php nmap d3 ccpublic function __construct(){<CR>}<Esc>ki<Tab><Tab>
 
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
 "neocomplcache - автокомплит и мног очего ещё
 set nocp                    " 'compatible' is not set
+
