@@ -221,6 +221,7 @@ hi MatchParen ctermfg=8 ctermbg=3 guifg=#353547 guibg=#c98351 guisp=NONE cterm=N
 hi ModeMsg ctermfg=15 ctermbg=NONE guifg=#ffffff guibg=NONE guisp=NONE cterm=NONE gui=NONE
 hi MoreMsg ctermfg=7 ctermbg=NONE guifg=#949494 guibg=NONE guisp=NONE cterm=NONE gui=NONE
 hi NonText ctermfg=15 ctermbg=NONE guifg=#494949 guibg=NONE guisp=NONE cterm=NONE gui=NONE
+"current by me
 hi Pmenu ctermfg=0 ctermbg=6 guifg=#292c36 guibg=#64878f guisp=NONE cterm=NONE gui=NONE
 hi PmenuSbar ctermfg=8 ctermbg=8 guifg=#353547 guibg=#353547 guisp=NONE cterm=NONE gui=NONE
 hi PmenuSel ctermfg=15 ctermbg=3 guifg=#ffffff guibg=#c98351 guisp=NONE cterm=NONE gui=NONE
