@@ -1,17 +1,22 @@
 set number
 set relativenumber
+set guioptions -=T
 "set expandtab
+set ghr=0
 set noequalalways
 set tabstop=4
 set guifont=Monospace\ 16px
 set linespace=1
-filetype plugin on          " plugins are enabled
+filetype plugin on " plugins are enabled
 set hlsearch
 set incsearch
 set encoding=utf-8
+set splitright
+" set splitbelow
 syntax on
 set listchars=eol:¬,trail:·,extends:>,precedes:<,space:-,tab:↓-
 set list! "show unprintable simbols
+" set nolist
 set mps+=<:>
 set showmatch
 set confirm
@@ -31,29 +36,34 @@ set dictionary+=/usr/share/dict/func
 set noswapfile
 set nobackup
 set directory=/tmp
-set lines=80
-set columns=150
+" set lines=80
+" set columns=150
 set filetype=php
 set laststatus=2
-colorscheme wwdc16
+
 let g:foo_DefineAutoCommands = 1
-"color dracula
+let NERDTreeQuitOnOpen = 1
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+let g:wwdc16_use16 = 1
+color wwdc16
 "
 " let g:netrw_altv          = 1
 " let g:netrw_fastbrowse    = 1
-let g:netrw_keepdir       = 0
+" let g:netrw_keepdir       = 0
 let g:netrw_liststyle     = 3
 " let g:netrw_retmap        = 1
 let g:netrw_silent        = 1
 let g:netrw_special_syntax= 1
 let g:netrw_browse_split = 20
 " let g:netrw_sort_direction=reverse
-let g:netrw_winsize = 25
+let g:netrw_winsize = 85
 let g:netrw_ftp_cmd="ftp -p"
 let g:closetag_html_style=1
 " let g:netrw_localrmdir='rm -r'
 "
-let g:gruvbox_contrast_dark = 'dark'
+" let g:gruvbox_contrast_dark = 'light'
+" set bg=light "set light for gruvbox
 
 if getcwd() == "/media/alex/1C5036035035E3E4/0-Studying/English/words-phrases"
 	execute 'so Session.vim'
@@ -103,8 +113,12 @@ function! AdjustFontSize(amount)
 	let font_data_list[1] = substitute(font_data_list[1], 'px', '', '')
 	if (a:amount == 2)
 		let font_data_list[1] = font_data_list[1] + 2
+		execute ":set co=999"
+		execute ":set lines=999"
 	else
 		let font_data_list[1] = font_data_list[1] - 2
+		execute ":set co=999"
+		execute ":set lines=999"
 	endif
 	let newfont = join(font_data_list, " ")
 	let newfont = newfont . "px"
@@ -114,54 +128,20 @@ function! AdjustFontSize(amount)
   endif
 endfunction
 
-	
-function! LargerFont()
-  call AdjustFontSize(2)
-endfunction
-command! LargerFont call LargerFont()
 
-function! SmallerFont()
-  call AdjustFontSize(-2)
-endfunction
-command! SmallerFont call SmallerFont()
-
-
-
-if g:foo_DefineAutoCommands
-	augroup Foo
-		autocmd BufEnter *.js imap r r<Esc>:call JS_template()<CR>a
-		autocmd BufLeave *.js iunmap r
-	augroup END
-	autocmd InsertLeave *.php :call PR_fun()
-	
-endif " g:foo_DefineAutoCommands
-fun! JS_template()
-  if getline(".") !~ '<scr$'
-    return
-  endif
-  s/scr$/script language="JavaScript">/
-  append
-  "function foo() {
-      alert("Hello, world.");
-    }
-  </script>
-.
-endfun
-
-fun! PR_fun()
-	if matchstr(getline("."), "pr-f") == 'pr-f'
-		execute "normal d1"
-	endif
-	if matchstr(getline("."), "pu-f") == 'pu-f'
-		execute "normal d2"
-	endif
-	if matchstr(getline("."), "pu-cf") == 'pu-cf'
-		execute "normal d3"
-	endif
-endfun
+" fun! PR_fun()
+" 	if matchstr(getline("."), "pr-f") == 'pr-f'
+" 		execute "normal d1"
+" 	endif
+" 	if matchstr(getline("."), "pu-f") == 'pu-f'
+" 		execute "normal d2"
+" 	endif
+" 	if matchstr(getline("."), "pu-cf") == 'pu-cf'
+" 		execute "normal d3"
+" 	endif
+" endfun
 
 " autocmd MyAutoCmd VimLeavePre *  call QuitNetrw()
-1
 
 "-- statuslineconfit
 set statusline=[%{strlen(&fenc)?&fenc:'none'}, "file encoding
@@ -195,40 +175,44 @@ set statusline+=\♦%f                           " file name
 let php_sql_query=1
 let php_htmlInStrings=1
 
-hi Normal ctermbg=black  "no background  in  the terminal vim
+hi Normal ctermbg=NONE  "no background  in  the terminal vim
 hi Comment guifg=gray30 
 hi Search guibg=red guifg=black
+hi SpecialKey ctermfg=darkblue
+
+
 
 "--mapping
 
 vmap <F2> "+y
-vmap <F3> "+gP
-imap <F3> <C-c>"+gP
-nmap <F3> "+gP
+vmap <F3> "+gp
+imap <F3> <C-c>"+gp
+nmap <F3> "+gp
 nmap ev :tabedit $MYVIMRC <CR>
-nmap ed :w <CR> :bd <CR> :source $MYVIMRC <CR> 
-nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
+nmap ed :w <CR> :source $MYVIMRC <CR> :bd <CR>
+
+
+" nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
 " nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
 nmap <Leader>1 <C-w>l:q<CR>
-nmap <Leader>[ :set co-=15<CR>
-nmap <Leader>] :set co+=15<CR>
+nmap <Leader>[ :set co-=35<CR>
+nmap <Leader>] :set co+=35<CR>
 imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
 imap ;; <Esc>
 vmap ;; <Esc>
 "buffer only
 " nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
 vmap <F12> <C-c>j<S-$>v<S-^><F2><S-v>zz
-vmap ;' d<Esc>i'<Esc>pi
-vmap ;" d<Esc>i"<C-c>pi
-imap <leader>w (<Esc>lxea);
-nmap <leader>s <S-%>x<C-o>x 
-nmap <leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
+vmap ,' d<Esc>i'<Esc>pi
+vmap ," d<Esc>i"<C-c>pi
+imap <Leader>w (<Esc>lxea);
+nmap <Leader>s <S-%>x<C-o>x 
+nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
 "above delete next similar character e.g. "
 nmap vt vf>
 
-
-imap <leader>; <Esc><S-a>;<Esc>
-imap <leader>c <Esc>ya><S-$>pa/<Esc>hi<CR><CR><Esc>ki<Tab> 
+imap <Leader>; <Esc><S-a>;<Esc>
+imap <Leader>c <Esc>ya><S-$>p<S-%>a/<Esc>hi<CR><CR><Esc>ki<Tab> 
 map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr> 
@@ -236,12 +220,14 @@ map <F7> <Esc>:DisablePHPFolds<Cr>
 " Split management>
 " nnoremap <silent> [b :bprevious<cr>
 " nnoremap <silent> ]b :bnext<cr>
-nmap 2l :exe "vertical resize " . (winwidth(0) * 3/2)<CR>
-nmap 2j :exe "vertical resize " . (winwidth(0) * 2/3)<CR>
+nmap 2ll :exe "vertical resize " . (winwidth(0) + 162)<CR>
+nmap 2l :exe "vertical resize " . (winwidth(0) + 36)<CR>
+nmap 2hh :exe "vertical resize " . (winwidth(0) - 162)<CR>
+nmap 2h :exe "vertical resize " . (winwidth(0) - 36)<CR>
 nmap <Tab>l <C-w>l
 nmap <Tab>h <C-w>h
-nmap <A-=> :LargerFont<CR>
-nmap <A--> :SmallerFont<CR>
+nmap <A-=> :call AdjustFontSize(2)<CR>
+nmap <A--> :call AdjustFontSize(-2)<CR>
 "machine autoritetparts.com.ua login ftpuser password pas
 "nunmap .
 "nunmap ,
@@ -251,9 +237,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tomtom/tcomment_vim'
 Plug 'jiangmiao/auto-pairs'
-Plug 'StanAngeloff/php.vim'
-"Plug 'jelera/vim-javascript-syntax'
-" Plug 'dracula/vim', {'as':'dracula'}
+" Plug 'StanAngeloff/php.vim'
 Plug 'jwalton512/vim-blade'
 ":PlugInstall
 
@@ -262,22 +246,34 @@ Plug 'jwalton512/vim-blade'
 call plug#end()
 "after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 
-map <C-n> :NERDTreeToggle<CR>
+map <Leader>n :NERDTreeToggle<CR>
 
-autocmd FileType netrw set bufhidden=delete
 autocmd FileType php set foldmethod=syntax
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 au BufRead *.html set filetype=htmlm4
 autocmd FileType python,html setlocal foldmethod=indent
-autocmd FileType html,php inoremap ;d <div<Space>class=""></div><Esc><S-f><i<CR><CR><BS><Esc>k
-autocmd FileType html,php inoremap ;a <a<Space>href=""><++></a><Space><++><Esc>F"i
-autocmd FileType php nmap d1 ccprivate function my(){<CR>}<Esc>k
-autocmd FileType php nmap d2 ccpublic function my(){<CR>}<Esc>ki<Tab><Tab>
-autocmd FileType php nmap d3 ccpublic function __construct(){<CR>}<Esc>ki<Tab><Tab>
+autocmd BufWinEnter *.py colorscheme wwdc17
+augroup tagsautocomplit
+	autocmd!
+	autocmd FileType html inoremap <di <div<Space>class=""></div><Esc><S-%>i<CR><CR><Esc>k<S-a><Tab>
+	autocmd FileType html inoremap <a <a<Space>href=""></a><Space><Esc>F<i
+	autocmd FileType html inoremap <u <ul<Space>class=""><Esc>o<li></li><Esc>yyo</ul><Esc>k
+	autocmd FileType html inoremap <sel <select<Space>class=""><Esc>o<option value=""></option><Esc>yyo</select><Esc>k
+augroup END
+
+
+autocmd FileType php inoremap puf public<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap prf private<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap pstaf public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
 
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
 "neocomplcache - автокомплит и мног очего ещё
 set nocp                    " 'compatible' is not set
 
+"preparing for english training
+" hi Visual guibg=lightblue guifg=black gui=bold
+" path of colorscheme
+"/usr/share/vim/vim81/colors
+" hi Normal ctermbg=NONE  "make background transparent in terminal 
