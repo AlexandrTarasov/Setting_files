@@ -65,8 +65,19 @@ let g:closetag_html_style=1
 " let g:gruvbox_contrast_dark = 'light'
 " set bg=light "set light for gruvbox
 
+if exists('+colorcolumn')
+ set colorcolumn=80
+endif
+if has("gui_running")
+  " GUI is running or is about to start.
+  " Maximize gvim window.
+  set lines=60 co=160
+endif
+
 if getcwd() == "/media/alex/1C5036035035E3E4/0-Studying/English/words-phrases"
+	" execute "set co=999"
 	execute 'so Session.vim'
+	execute "normal \<c-w>="
 endif
 if getcwd() == "/home/alex"
 	let g:netrw_list_hide = '^\..*$'
@@ -77,14 +88,6 @@ endif
 "   autocmd VimEnter * :Vexplore
 " augroup END
 "if version >= 703
-if exists('+colorcolumn')
- set colorcolumn=80
-endif
-if has("gui_running")
-  " GUI is running or is about to start.
-  " Maximize gvim window.
-  set lines=60 columns=140
-endif
 
 "set statusline=%f%m%r%h%w\ %y\ enc:%{&enc}\ [:%{&ff}]\ fenc:%{&fenc}%=(ch:%3b\ hex:%2B)\ col:%2c\ line:%2l/%L\ [%2p%%]
 
@@ -131,7 +134,7 @@ endfunction
 
 " fun! PR_fun()
 " 	if matchstr(getline("."), "pr-f") == 'pr-f'
-" 		execute "normal d1"
+" 
 " 	endif
 " 	if matchstr(getline("."), "pu-f") == 'pu-f'
 " 		execute "normal d2"
@@ -189,7 +192,7 @@ vmap <F3> "+gp
 imap <F3> <C-c>"+gp
 nmap <F3> "+gp
 nmap ev :tabedit $MYVIMRC <CR>
-nmap ed :w <CR> :source $MYVIMRC <CR> :bd <CR>
+nmap ed :w <CR> :source $MYVIMRC <CR> 
 
 
 " nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
@@ -277,3 +280,4 @@ set nocp                    " 'compatible' is not set
 " path of colorscheme
 "/usr/share/vim/vim81/colors
 " hi Normal ctermbg=NONE  "make background transparent in terminal 
+
