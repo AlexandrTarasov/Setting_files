@@ -192,7 +192,7 @@ vmap <F3> "+gp
 imap <F3> <C-c>"+gp
 nmap <F3> "+gp
 nmap ev :tabedit $MYVIMRC <CR>
-nmap ed :w <CR> :source $MYVIMRC <CR> 
+nmap ed :w <CR> :source $MYVIMRC<CR> :q<CR>
 
 
 " nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
@@ -211,6 +211,8 @@ vmap ," d<Esc>i"<C-c>pi
 imap <Leader>w (<Esc>lxea);
 nmap <Leader>s <S-%>x<C-o>x 
 nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
+nmap ,sp :set filetype=php<CR> 
+nmap ,sh :set filetype=html<CR> 
 "above delete next similar character e.g. "
 nmap vt vf>
 
@@ -266,9 +268,12 @@ augroup tagsautocomplit
 augroup END
 
 
+autocmd FileType php inoremap cons console.log()
+
 autocmd FileType php inoremap puf public<Space>function<Space>(){<CR>}<Esc>kwwi
 autocmd FileType php inoremap prf private<Space>function<Space>(){<CR>}<Esc>kwwi
 autocmd FileType php inoremap pstaf public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
+
 
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
@@ -280,4 +285,3 @@ set nocp                    " 'compatible' is not set
 " path of colorscheme
 "/usr/share/vim/vim81/colors
 " hi Normal ctermbg=NONE  "make background transparent in terminal 
-
