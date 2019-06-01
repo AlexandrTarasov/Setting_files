@@ -91,6 +91,7 @@ endif
 
 "set statusline=%f%m%r%h%w\ %y\ enc:%{&enc}\ [:%{&ff}]\ fenc:%{&fenc}%=(ch:%3b\ hex:%2B)\ col:%2c\ line:%2l/%L\ [%2p%%]
 
+"---functions
 
 function! InsertStatuslineColor(mode)
   if a:mode == 'i'
@@ -108,7 +109,6 @@ au InsertLeave * hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 " default the statusline to green when entering Vim
 hi statusline guibg=DarkGrey ctermfg=8 guifg=White ctermbg=15
 "
-"---functions
 "
 function! AdjustFontSize(amount)
   if has("gui") 
@@ -131,6 +131,12 @@ function! AdjustFontSize(amount)
   endif
 endfunction
 
+
+function! Grab_block(lines, shift)
+	let lin  = a:lines
+	let shif = a:shift
+	execute "normal ".shif."k".lin."yy".shif."jp"
+endfunction
 
 " fun! PR_fun()
 " 	if matchstr(getline("."), "pr-f") == 'pr-f'
@@ -206,12 +212,15 @@ vmap ;; <Esc>
 "buffer only
 " nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
 vmap <F12> <C-c>j<S-$>v<S-^><F2><S-v>zz
-vmap ,' d<Esc>i'<Esc>pi
-vmap ," d<Esc>i"<C-c>pi
+vmap ,' d<Esc>i'<Esc>pe
+vmap ," d<Esc>i"<C-c>pe
+vmap ,] <S-c>{}<Esc>i<Cr><Esc>pkdd
+
 imap <Leader>w (<Esc>lxea);
 nmap <Leader>s <S-%>x<C-o>x 
 nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
 nmap ,sp :set filetype=php<CR> 
+nmap ,sj :set filetype=javascript<CR> 
 nmap ,sh :set filetype=html<CR> 
 "above delete next similar character e.g. "
 nmap vt vf>
@@ -225,31 +234,22 @@ map <F7> <Esc>:DisablePHPFolds<Cr>
 " Split management>
 " nnoremap <silent> [b :bprevious<cr>
 " nnoremap <silent> ]b :bnext<cr>
-nmap 2ll :exe "vertical resize " . (winwidth(0) + 162)<CR>
-nmap 2l :exe "vertical resize " . (winwidth(0) + 36)<CR>
-nmap 2hh :exe "vertical resize " . (winwidth(0) - 162)<CR>
-nmap 2h :exe "vertical resize " . (winwidth(0) - 36)<CR>
+" nmap 2ll :exe "vertical resize " . (winwidth(0) + 112)<CR>
+nmap 2l :exe "vertical resize " . (winwidth(0) + 56)<CR>
+" nmap 2hh :exe "vertical resize " . (winwidth(0) - 112)<CR>
+nmap 2h :exe "vertical resize " . (winwidth(0) - 56)<CR>
 nmap <Tab>l <C-w>l
 nmap <Tab>h <C-w>h
+
 nmap <A-=> :call AdjustFontSize(2)<CR>
 nmap <A--> :call AdjustFontSize(-2)<CR>
+nmap <Leader>f :call Grab_block(1,)<Left>
+
 "machine autoritetparts.com.ua login ftpuser password pas
 "nunmap .
 "nunmap ,
 
-" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
-call plug#begin('~/.vim/plugged')
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'tomtom/tcomment_vim'
-Plug 'jiangmiao/auto-pairs'
-" Plug 'StanAngeloff/php.vim'
-Plug 'jwalton512/vim-blade'
-":PlugInstall
 
-" https://github.com/SirVer/ultisnips
-" Initialize plugin system
-call plug#end()
-"after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 
 map <Leader>n :NERDTreeToggle<CR>
 
@@ -268,13 +268,31 @@ augroup tagsautocomplit
 augroup END
 
 
-autocmd FileType php inoremap cons console.log()
+autocmd FileType php inoremap cons console.log()<Esc>i
 
-autocmd FileType php inoremap puf public<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap prf private<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap pstaf public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
+autocmd FileType php inoremap __сo function<Space>__construct(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap pub public<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap pri private<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap psta public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
 
 
+"--- plagins
+" Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
+call plug#begin('~/.vim/plugged')
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'tomtom/tcomment_vim'
+Plug 'jiangmiao/auto-pairs'
+" Plug 'StanAngeloff/php.vim'
+Plug 'jwalton512/vim-blade'
+":PlugInstall
+
+" https://github.com/SirVer/ultisnips
+" Initialize plugin system
+call plug#end()
+
+
+
+"after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
 "neocomplcache - автокомплит и мног очего ещё
@@ -282,6 +300,8 @@ set nocp                    " 'compatible' is not set
 
 "preparing for english training
 " hi Visual guibg=lightblue guifg=black gui=bold
+" hi Special  guifg=darkred  gui=bold
 " path of colorscheme
 "/usr/share/vim/vim81/colors
+" hi MatchParen guibg=darkgreen ctermbg=none
 " hi Normal ctermbg=NONE  "make background transparent in terminal 
