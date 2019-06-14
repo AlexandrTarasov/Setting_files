@@ -5,27 +5,48 @@
 
 <script type="text/javascript">
 
-function makePhoneNumber(event){
-    document.getElementById("phone").addEventListener("keyup", makePhoneNumber);
-    var val = document.getElementById("phone").value;
+document.getElementById("phone").addEventListener("keyup", function(event) {makePhoneNumber(event)});
+
+function makePhoneNumber(event)
+{
+    var val = document.getElementById(event.target.id).value;
     let keynum = event.keyCode;
-    if (event.keyCode === 8) {}
+
+    if (event.keyCode === 8) {
+        changeInputBorderColor(val.length, event.target.id);
+    }
     else
     {
-        console.log(keynum);
-        if (  ((keynum > 48) && (keynum < 58)) || ((keynum > 96) && (keynum < 105))   ) {
-            if(val.length == 3 || val.length == 7 || val.length == 10 ){
-                val=val+'-';
-                document.getElementById("phone").value = val;
+        if(val.charAt(0) !== '0'){alert("Начинайте с цифры 0.\n Формат: 098-000-00-00"); val = val.slice(0, -1) ; document.getElementById(event.target.id).value = val;}
+        if (  ((keynum > 47) && (keynum < 59)) || ((keynum > 95) && (keynum < 106))   ) {
+            if(val.length == 4 || val.length == 8 || val.length == 11 ){
+                temp = val[val.length-1];
+                val = val.slice(0, -1) ;
+                val +='-' + temp;
+                document.getElementById(event.target.id).value = val;
             }
         }
         else
         {
             alert("только цифры в номере");
-            document.getElementById("phone").value = val.substring(0, val.length - 1);
+            document.getElementById(event.target.id).value = val.substring(0, val.length - 1);
         }
+        changeInputBorderColor(val.length, event.target.id);
     }
 }
+
+function changeInputBorderColor(inputLengtha, phoneValue)
+{
+    if(inputLengtha == 13)
+    {
+        document.getElementById(phoneValue).classList.remove('phoneNumberRed'); //put your css class here
+        document.getElementById(phoneValue).classList.add('phoneNumberGreen');//put your css class here
+    }else{
+        document.getElementById(phoneValue).classList.remove('phoneNumberGreen'); //put your css class here
+        document.getElementById(phoneValue).classList.add('phoneNumberRed'); //put your css class here
+    }
+}
+
 </script>
 </body>
 </html>
