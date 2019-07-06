@@ -184,14 +184,15 @@ set statusline+=\♦%f                           " file name
 let php_sql_query=1
 let php_htmlInStrings=1
 
-hi Normal ctermbg=NONE  "no background  in  the terminal vim
+"no background  in  the terminal vim
+hi Normal ctermbg=NONE  
 hi Comment guifg=gray30 
 hi Search guibg=red guifg=black
 hi SpecialKey ctermfg=darkblue
 
 
 
-"--mapping
+"---mapping
 
 vmap <F2> "+y
 vmap <F3> "+gp
@@ -203,22 +204,27 @@ nmap ed :w <CR> :source $MYVIMRC<CR> :q<CR>
 
 " nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
 " nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
-nmap <Leader>1 <C-w>l:q<CR>
+nmap <Leader>1 <C-w>l:q<CR> "close go next rigt and close left one.
 nmap <Leader>[ :set co-=35<CR>
 nmap <Leader>] :set co+=35<CR>
 imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
-imap ;; <Esc>
-vmap ;; <Esc>
+imap ,, <Esc>
+vmap ,, <Esc>
 "buffer only
 " nnoremap <leader>bo :call te#tools#buf_only('', '')<cr>
 vmap <F12> <C-c>j<S-$>v<S-^><F2><S-v>zz
 vmap ,' d<Esc>i'<Esc>pe
 vmap ," d<Esc>i"<C-c>pe
-vmap ,] <S-c>{}<Esc>i<Cr><Esc>pkdd
-
-imap <Leader>w (<Esc>lxea);
-nmap <Leader>s <S-%>x<C-o>x 
-nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
+"put line of text in curly braces
+vmap ,] <S-c>{}<Esc>i<Cr><Esc>pkdd 
+"seve buffer
+nmap <c-s> :w<CR>
+imap <c-s> <Esc>:w<CR>
+"wrap by parentheses 
+imap <Leader>w (<Esc>lxea);  
+"del pared parentheses"
+nmap <Leader>s <S-%>x<C-o>x   
+" nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
 nmap ,sp :set filetype=php<CR> 
 nmap ,sj :set filetype=javascript<CR> 
 nmap ,sh :set filetype=html<CR> 
@@ -243,11 +249,11 @@ nmap <Tab>h <C-w>h
 
 nmap <A-=> :call AdjustFontSize(2)<CR>
 nmap <A--> :call AdjustFontSize(-2)<CR>
-nmap <Leader>f :call Grab_block(1,)<Left>
-
+nmap <Leader>g :call Grab_block(1,)<Left>
+nnoremap <leader>f :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
 "machine autoritetparts.com.ua login ftpuser password pas
 "nunmap .
-"nunmap ,
+" nunmap ;;
 
 
 
@@ -271,9 +277,9 @@ augroup END
 autocmd FileType php inoremap cons console.log()<Esc>i
 
 autocmd FileType php inoremap __сo function<Space>__construct(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap pub public<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap pri private<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap psta public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
+autocmd FileType php inoremap fpu public<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap fpr private<Space>function<Space>(){<CR>}<Esc>kwwi
+autocmd FileType php inoremap fps public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
 
 
 "--- plagins
@@ -290,18 +296,25 @@ Plug 'jwalton512/vim-blade'
 " Initialize plugin system
 call plug#end()
 
-
+"TODO  :%s/^/'/g      :%s/$/'/g    make array from lines
 
 "after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
 "neocomplcache - автокомплит и мног очего ещё
-set nocp                    " 'compatible' is not set
+" 'compatible' is not set
+set nocp                   
 
-"preparing for english training
+"=====
+" preparing for english training past perfect
+" colorsceme gruvbox
 " hi Visual guibg=lightblue guifg=black gui=bold
+"=====
+" for phases
+" colorsceme wwcd17 
 " hi Special  guifg=darkred  gui=bold
 " path of colorscheme
 "/usr/share/vim/vim81/colors
 " hi MatchParen guibg=darkgreen ctermbg=none
 " hi Normal ctermbg=NONE  "make background transparent in terminal 
+
