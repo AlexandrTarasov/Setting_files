@@ -21,7 +21,7 @@ set mps+=<:>
 set showmatch
 set confirm
 set title "name of current buffer
-set incsearch " поиск фрагмента по мере его набора
+
 set smartindent
 set splitright
 set shiftwidth=4
@@ -247,6 +247,9 @@ nmap 2h :exe "vertical resize " . (winwidth(0) - 56)<CR>
 nmap <Tab>l <C-w>l
 nmap <Tab>h <C-w>h
 
+"make arrey from block
+vmap <leader>a :s/^/<Tab>'/ \| :'<,'>s/$/',/<CR><S-$>x gvdi$arr = [<CR><Esc>pkddki_
+
 nmap <A-=> :call AdjustFontSize(2)<CR>
 nmap <A--> :call AdjustFontSize(-2)<CR>
 nmap <Leader>g :call Grab_block(1,)<Left>
@@ -317,4 +320,3 @@ set nocp
 "/usr/share/vim/vim81/colors
 " hi MatchParen guibg=darkgreen ctermbg=none
 " hi Normal ctermbg=NONE  "make background transparent in terminal 
-
