@@ -276,15 +276,12 @@ augroup tagsautocomplit
 	autocmd FileType html inoremap <sel <select<Space>class=""><Esc>o<option value=""></option><Esc>yyo</select><Esc>k
 augroup END
 
+autocmd FileType php inoremap fco public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
+autocmd FileType php inoremap fpu public<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
+autocmd FileType php inoremap fpr private<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
+autocmd FileType php inoremap fps public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
 
 autocmd FileType php inoremap cons console.log()<Esc>i
-
-autocmd FileType php inoremap __сo function<Space>__construct(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap fpu public<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap fpr private<Space>function<Space>(){<CR>}<Esc>kwwi
-autocmd FileType php inoremap fps public<Space>static<Space>function<Space>(){<CR>}<Esc>kwwwi
-
-
 "--- plagins
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
