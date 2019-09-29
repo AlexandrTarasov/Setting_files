@@ -29,6 +29,7 @@ set shiftwidth=4
 set autoindent 
 set wrap
 set linebreak
+set nocp
 " Smoother changes
 set ttyfast
 set cursorcolumn
@@ -40,6 +41,7 @@ set directory=/tmp
 " set columns=150
 set filetype=php
 set laststatus=2
+" set autochdir  "set current dir of oppened file
 
 let g:foo_DefineAutoCommands = 1
 let NERDTreeQuitOnOpen = 1
@@ -57,7 +59,7 @@ let g:netrw_silent        = 1
 let g:netrw_special_syntax= 1
 let g:netrw_browse_split = 20
 " let g:netrw_sort_direction=reverse
-let g:netrw_winsize = 85
+let g:netrw_winsize = 75
 let g:netrw_ftp_cmd="ftp -p"
 let g:closetag_html_style=1
 " let g:netrw_localrmdir='rm -r'
@@ -138,6 +140,20 @@ function! Grab_block(lines, shift)
 	execute "normal ".shif."k".lin."yy".shif."jp"
 endfunction
 
+fun! Make_class(fanc)
+	let fanct = a:fanc
+	let i = 0
+	let file_name = expand('%:r')
+	execute "normal a\n/*namespace App; */\n\n"
+	execute("normal aclass ".file_name."\n{\n\tfunction __construct()\n\t{\n \n}")
+	while i < fanct
+		execute("normal a\n\n\tpublic function my".i."()\n{\n \n}")
+		let i +=1
+	endwhile
+	execute "normal a\n"
+	" execute "0r ~/.vim/php_class.skel" 
+endfunction
+
 " fun! PR_fun()
 " 	if matchstr(getline("."), "pr-f") == 'pr-f'
 " 
@@ -204,7 +220,9 @@ nmap ed :w <CR> :source $MYVIMRC<CR> :q<CR>
 
 " nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
 " nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
-nmap <Leader>1 <C-w>l:q<CR> "close go next rigt and close left one.
+
+"close go next rigt and close left one.
+nmap <Leader>1 <C-w>l:q<CR> 
 nmap <Leader>[ :set co-=35<CR>
 nmap <Leader>] :set co+=35<CR>
 imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
@@ -217,6 +235,19 @@ vmap ,' d<Esc>i'<Esc>pe
 vmap ," d<Esc>i"<C-c>pe
 "put line of text in curly braces
 vmap ,] <S-c>{}<Esc>i<Cr><Esc>pkdd 
+vmap ,) <S-c>()<Esc>i<Cr><Esc>pkdd 
+"making variables
+imap ,mv $<Space>=<Space>//;<Esc>5hi
+imap ,ma $arr_<Space>=<Space>[];<Esc><S-f>_a
+imap ,mpp private<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
+imap ,mp public<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
+imap ,e <Esc><S-a>;<Esc>
+"change current dir
+nmap ,ccd :cd %:p:h<CR>
+"finef next apearence of //
+imap ,f <Esc>/\/\/<CR>vlc
+" go to end of line in insert mode
+imap ,ge <Esc><S-a><Space>
 "seve buffer
 nmap <c-s> :w<CR>
 imap <c-s> <Esc>:w<CR>
@@ -230,8 +261,6 @@ nmap ,sj :set filetype=javascript<CR>
 nmap ,sh :set filetype=html<CR> 
 "above delete next similar character e.g. "
 nmap vt vf>
-
-imap <Leader>; <Esc><S-a>;<Esc>
 imap <Leader>c <Esc>ya><S-$>p<S-%>a/<Esc>hi<CR><CR><Esc>ki<Tab> 
 map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
@@ -253,35 +282,39 @@ vmap <leader>a :s/^/<Tab>'/ \| :'<,'>s/$/',/<CR><S-$>x gvdi$arr = [<CR><Esc>pkdd
 nmap <A-=> :call AdjustFontSize(2)<CR>
 nmap <A--> :call AdjustFontSize(-2)<CR>
 nmap <Leader>g :call Grab_block(1,)<Left>
+nmap ,mc :call Make_class()<Left>
 nnoremap <leader>f :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
-"machine autoritetparts.com.ua login ftpuser password pas
-"nunmap .
-" nunmap ;;
-
 
 
 map <Leader>n :NERDTreeToggle<CR>
 
-autocmd FileType php set foldmethod=syntax
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-au BufRead *.html set filetype=htmlm4
-autocmd FileType python,html setlocal foldmethod=indent
+au BufNewFile *.html 0r ~/.vim/html.skel 
+" au BufNewFile *.php 0r ~/.vim/php_class.skel \ :normal gg3j<S-a>
+au BufRead *.html set filetype=html
+
+autocmd FileType python,html,php setlocal foldmethod=indent
 autocmd BufWinEnter *.py colorscheme wwdc17
 augroup tagsautocomplit
 	autocmd!
-	autocmd FileType html inoremap <di <div<Space>class=""></div><Esc><S-%>i<CR><CR><Esc>k<S-a><Tab>
-	autocmd FileType html inoremap <a <a<Space>href=""></a><Space><Esc>F<i
+	autocmd FileType html inoremap <di <div<Space>class=""></div><Esc><S-%>i<CR><CR><Esc>k<S-a><Tab>//<Esc>k7li
+	autocmd FileType html inoremap <a <a<Space>href=""<Space>class="">//</a><Space><Esc><S-^>f"a
 	autocmd FileType html inoremap <u <ul<Space>class=""><Esc>o<li></li><Esc>yyo</ul><Esc>k
 	autocmd FileType html inoremap <sel <select<Space>class=""><Esc>o<option value=""></option><Esc>yyo</select><Esc>k
+	autocmd FileType html inoremap <p <p<Space>class=""<Space>id="">//</p><Esc><S-^>f"a
 augroup END
 
-autocmd FileType php inoremap fco public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
-autocmd FileType php inoremap fpu public<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
-autocmd FileType php inoremap fpr private<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
-autocmd FileType php inoremap fps public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko<Esc>kkf<S-(>i
+autocmd FileType php inoremap ,mfc public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko
+autocmd FileType php inoremap ,mfp private<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
+autocmd FileType php inoremap ,mfs public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
+autocmd FileType php inoremap ,mf public<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
+autocmd FileType php inoremap $th $this->
+autocmd FileType php inoremap <?= <?=?><Esc>hi
+autocmd FileType php inoremap if( if(){<CR>}else{<CR>}<Esc><S-o>//<Esc>k<S-o>//<Esc>khha<Space><Space><Esc>i
 
-autocmd FileType php inoremap cons console.log()<Esc>i
+autocmd FileType javascript inoremap cons console.log()<Esc>i
+
 "--- plagins
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
@@ -291,20 +324,18 @@ Plug 'jiangmiao/auto-pairs'
 " Plug 'StanAngeloff/php.vim'
 Plug 'jwalton512/vim-blade'
 ":PlugInstall
-
+ 
 " https://github.com/SirVer/ultisnips
 " Initialize plugin system
 call plug#end()
-
-"TODO  :%s/^/'/g      :%s/$/'/g    make array from lines
 
 "after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
 "neocomplcache - автокомплит и мног очего ещё
 " 'compatible' is not set
-set nocp                   
-
+":put =expand('%:r') put file name in current line 
+" :lcd %:p:h
 "=====
 " preparing for english training past perfect
 " colorsceme gruvbox
@@ -316,4 +347,4 @@ set nocp
 " path of colorscheme
 "/usr/share/vim/vim81/colors
 " hi MatchParen guibg=darkgreen ctermbg=none
-" hi Normal ctermbg=NONE  "make background transparent in terminal 
+" hi Normal ctermbg=NONE  "make background transparent in terminal
