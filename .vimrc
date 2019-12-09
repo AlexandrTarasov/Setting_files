@@ -10,7 +10,7 @@ set linespace=1
 filetype plugin on " plugins are enabled
 set hlsearch
 set incsearch
-set encoding=utf-8
+set encoding=UTF-8
 set splitright
 " set splitbelow
 syntax on
@@ -21,7 +21,8 @@ set mps+=<:>
 set showmatch
 set confirm
 set title "name of current buffer
-
+set spell
+set spelllang=en_us
 set smartindent
 set splitright
 set shiftwidth=4
@@ -37,33 +38,37 @@ set dictionary+=/usr/share/dict/func
 set noswapfile
 set nobackup
 set directory=/tmp
+set completeopt=noinsert,menuone
 " set lines=80
 " set columns=150
 set filetype=php
+"make vim understend aliased from bush
 set laststatus=2
 " set autochdir  "set current dir of oppened file
+
+let g:phpactorPhpBin = 'php'
+let g:phpactorBranch = 'master'
+let g:phpactorOmniAutoClassImport = v:true
+let g:phpactorOmniError = v:true
 
 let g:foo_DefineAutoCommands = 1
 let NERDTreeQuitOnOpen = 1
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 let g:wwdc16_use16 = 1
-color wwdc16
 "
-" let g:netrw_altv          = 1
-" let g:netrw_fastbrowse    = 1
+let g:netrw_fastbrowse    = 1
 " let g:netrw_keepdir       = 0
 let g:netrw_liststyle     = 3
 " let g:netrw_retmap        = 1
-let g:netrw_silent        = 1
 let g:netrw_special_syntax= 1
 let g:netrw_browse_split = 20
 " let g:netrw_sort_direction=reverse
 let g:netrw_winsize = 75
-let g:netrw_ftp_cmd="ftp -p"
 let g:closetag_html_style=1
 " let g:netrw_localrmdir='rm -r'
-"
+
+color wwdc16
 " let g:gruvbox_contrast_dark = 'light'
 " set bg=light "set light for gruvbox
 
@@ -83,7 +88,8 @@ if getcwd() == "/media/alex/1C5036035035E3E4/0-Studying/English/words-phrases"
 endif
 if getcwd() == "/home/alex"
 	let g:netrw_list_hide = '^\..*$'
-	autocmd VimEnter * :Ex
+	autocmd VimEnter * :NERDTreeToggle
+	execute 'normal \<S-b>'
 endif
 " augroup ProjectDrawer
 "   autocmd!
@@ -98,7 +104,7 @@ endif
 function! InsertStatuslineColor(mode)
   if a:mode == 'i'
     hi statusline guibg=Cyan ctermfg=6 guifg=Black ctermbg=0
-  elseif a:mode == 'r'
+  elseif a:mode == 'v'
     hi statusline guibg=Purple ctermfg=5 guifg=Black ctermbg=0
   else
     hi statusline guibg=DarkRed ctermfg=1 guifg=Black ctermbg=0
@@ -140,31 +146,26 @@ function! Grab_block(lines, shift)
 	execute "normal ".shif."k".lin."yy".shif."jp"
 endfunction
 
-fun! Make_class(fanc)
-	let fanct = a:fanc
-	let i = 0
-	let file_name = expand('%:r')
-	execute "normal a\n/*namespace App; */\n\n"
-	execute("normal aclass ".file_name."\n{\n\tfunction __construct()\n\t{\n \n}")
-	while i < fanct
-		execute("normal a\n\n\tpublic function my".i."()\n{\n \n}")
-		let i +=1
-	endwhile
-	execute "normal a\n"
-	" execute "0r ~/.vim/php_class.skel" 
+fun! Make_class()
+	let space_name = ''
+	let file_name = expand('%:t')[:-5]
+	" let file_name = file[:-4]			" remove last two bytes
+	let path_file = expand('%:p:h:t')
+	if path_file == 'Controllers'
+		let space_name = 'C'
+	elseif path_file == 'Models'
+		let space_name = 'M'
+	elseif path_file == 'Helpers'
+		let space_name = 'H'
+	else
+		let space_name = 'Comp'
+	endif
+	execute("normal i\nnamespace App".space_name."; \n\n")
+	execute("normal iclass ".file_name."\n{\n,mfc\<Esc>ji\<cr>\<esc>\<s-o>")
+	execute("normal a,mf")
+	" execute "normal a\n"
 endfunction
 
-" fun! PR_fun()
-" 	if matchstr(getline("."), "pr-f") == 'pr-f'
-" 
-" 	endif
-" 	if matchstr(getline("."), "pu-f") == 'pu-f'
-" 		execute "normal d2"
-" 	endif
-" 	if matchstr(getline("."), "pu-cf") == 'pu-cf'
-" 		execute "normal d3"
-" 	endif
-" endfun
 
 " autocmd MyAutoCmd VimLeavePre *  call QuitNetrw()
 
@@ -198,7 +199,8 @@ set statusline+=\♦%f                           " file name
 
                         
 let php_sql_query=1
-let php_htmlInStrings=1
+let php_html_in_strings=1
+let php_html_load = 1
 
 "no background  in  the terminal vim
 hi Normal ctermbg=NONE  
@@ -210,10 +212,11 @@ hi SpecialKey ctermfg=darkblue
 
 "---mapping
 
-vmap <F2> "+y
-vmap <F3> "+gp
-imap <F3> <C-c>"+gp
-nmap <F3> "+gp
+vmap <C-c> "+y
+vmap <C-v> "+gp
+imap <C-v> <Esc>"+gp
+" unmap <C-v> 
+"+gp doesn't work because C-v does make block visual mode
 nmap ev :tabedit $MYVIMRC <CR>
 nmap ed :w <CR> :source $MYVIMRC<CR> :q<CR>
 
@@ -242,23 +245,23 @@ imap ,ma $arr_<Space>=<Space>[];<Esc><S-f>_a
 imap ,mpp private<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
 imap ,mp public<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
 imap ,e <Esc><S-a>;<Esc>
-"change current dir
-nmap ,ccd :cd %:p:h<CR>
-"finef next apearence of //
+"change current dir to opened file dir
+nmap ,ccd :cd %:p:h<CR><CR>
+"fined next appearance of //
 imap ,f <Esc>/\/\/<CR>vlc
 " go to end of line in insert mode
 imap ,ge <Esc><S-a><Space>
 "seve buffer
 nmap <c-s> :w<CR>
 imap <c-s> <Esc>:w<CR>
-"wrap by parentheses 
-imap <Leader>w (<Esc>lxea);  
+" save file
+imap ,w (<Esc>lx$phxp
+nmap ,ds <S-%>x<C-o>x   
 "del pared parentheses"
-nmap <Leader>s <S-%>x<C-o>x   
 " nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
-nmap ,sp :set filetype=php<CR> 
-nmap ,sj :set filetype=javascript<CR> 
-nmap ,sh :set filetype=html<CR> 
+nmap ,tp :set filetype=php<CR> 
+nmap ,tj :set filetype=javascript<CR> 
+nmap ,th :set filetype=html<CR> 
 "above delete next similar character e.g. "
 nmap vt vf>
 imap <Leader>c <Esc>ya><S-$>p<S-%>a/<Esc>hi<CR><CR><Esc>ki<Tab> 
@@ -288,14 +291,16 @@ nnoremap <leader>f :silent execute "grep! -R " . shellescape(expand("<cword>")) 
 
 map <Leader>n :NERDTreeToggle<CR>
 
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+" autocmd FileType php set omnifunc=phpcomplete#CompletePHP
+autocmd FileType php setlocal omnifunc=phpactor#Complete
 autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
 au BufNewFile *.html 0r ~/.vim/html.skel 
-" au BufNewFile *.php 0r ~/.vim/php_class.skel \ :normal gg3j<S-a>
+au BufNewFile *.php :exe('normal a<?php')
 au BufRead *.html set filetype=html
 
 autocmd FileType python,html,php setlocal foldmethod=indent
 autocmd BufWinEnter *.py colorscheme wwdc17
+autocmd FileType javascript inoremap cons console.log()<Esc>i
 augroup tagsautocomplit
 	autocmd!
 	autocmd FileType html inoremap <di <div<Space>class=""></div><Esc><S-%>i<CR><CR><Esc>k<S-a><Tab>//<Esc>k7li
@@ -305,30 +310,35 @@ augroup tagsautocomplit
 	autocmd FileType html inoremap <p <p<Space>class=""<Space>id="">//</p><Esc><S-^>f"a
 augroup END
 
-autocmd FileType php inoremap ,mfc public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko
-autocmd FileType php inoremap ,mfp private<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
-autocmd FileType php inoremap ,mfs public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
-autocmd FileType php inoremap ,mf public<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
-autocmd FileType php inoremap $th $this->
+autocmd FileType php inoremap ,mcf public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko
+autocmd FileType php inoremap ,mpf private<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
+autocmd FileType php inoremap ,msf public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
+autocmd FileType php inoremap ,mf public<Space>function<Space>__n()<CR>{<CR>}<Esc>ko//<Esc>
+autocmd FileType php inoremap $th $this-><C-x><C-o>
+autocmd FileType php inoremap self self::<C-x><C-o>
+autocmd FileType php inoremap -> -><C-x><C-o>
 autocmd FileType php inoremap <?= <?=?><Esc>hi
 autocmd FileType php inoremap if( if(){<CR>}else{<CR>}<Esc><S-o>//<Esc>k<S-o>//<Esc>khha<Space><Space><Esc>i
 
-autocmd FileType javascript inoremap cons console.log()<Esc>i
 
 "--- plagins
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tomtom/tcomment_vim'
+Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
+Plug 'StanAngeloff/php.vim'
 Plug 'jiangmiao/auto-pairs'
-" Plug 'StanAngeloff/php.vim'
 Plug 'jwalton512/vim-blade'
 ":PlugInstall
  
 " https://github.com/SirVer/ultisnips
 " Initialize plugin system
 call plug#end()
-
+"linux search
+"grep -rnw '/path/to/somewhere/' -e 'pattern'
+"
+"
 "after the plugin have installed to apply comand  :source ~/.vimrc "and :PlugInstall
 "snipMate — позволяет быстро вставить в документ текстовый шаблон с помощью ключевого слова
 "vim-airline - добавляет красоты
@@ -347,4 +357,4 @@ call plug#end()
 " path of colorscheme
 "/usr/share/vim/vim81/colors
 " hi MatchParen guibg=darkgreen ctermbg=none
-" hi Normal ctermbg=NONE  "make background transparent in terminal
+" hi Normal ctermbg=NONE  "make background transparent in terminal 
