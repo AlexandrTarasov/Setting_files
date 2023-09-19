@@ -1,8 +1,11 @@
 set number
 set relativenumber
 set guioptions -=T
-"set expandtab
+set go -=m
+set go -=i
+set expandtab
 set ghr=0
+set noerrorbells
 set noequalalways
 set tabstop=4
 set guifont=Monospace\ 16px
@@ -16,20 +19,21 @@ set splitright
 syntax on
 set listchars=eol:¬,trail:·,extends:>,precedes:<,space:-,tab:↓-
 set list! "show unprintable simbols
-" set nolist
+"set nolist
 set mps+=<:>
 set showmatch
 set confirm
-set title "name of current buffer
+" set title "name of current buffer
 set spell
 set spelllang=en_us
+"to check spelling push z= buttons
 set smartindent
-set splitright
 set shiftwidth=4
 "set copyindent
 set autoindent 
 set wrap
 set linebreak
+set autowriteall "auto write file when buffer switched 
 set nocp
 " Smoother changes
 set ttyfast
@@ -39,15 +43,21 @@ set noswapfile
 set nobackup
 set directory=/tmp
 set completeopt=noinsert,menuone
+set guioptions-=e
 " set lines=80
 " set columns=150
 set filetype=php
 "make vim understend aliased from bush
 set laststatus=2
+set t_Co=256
+color wwdc16
+" winpos -0 -0
+hi vertsplit guifg=bg guibg=black
+
 " set autochdir  "set current dir of oppened file
 
-let g:phpactorPhpBin = 'php'
-let g:phpactorBranch = 'master'
+" let g:phpactorPhpBin = '/usr/bin/php7.3'
+" let g:phpactorBranch = 'master'
 let g:phpactorOmniAutoClassImport = v:true
 let g:phpactorOmniError = v:true
 
@@ -68,8 +78,7 @@ let g:netrw_winsize = 75
 let g:closetag_html_style=1
 " let g:netrw_localrmdir='rm -r'
 
-color wwdc16
-" let g:gruvbox_contrast_dark = 'light'
+let g:gruvbox_contrast_dark = 'light'
 " set bg=light "set light for gruvbox
 
 if exists('+colorcolumn')
@@ -78,18 +87,20 @@ endif
 if has("gui_running")
   " GUI is running or is about to start.
   " Maximize gvim window.
-  set lines=60 co=160
+  " execute 'winpos 1 0'
+    set lines=60 co=150
 endif
 
-if getcwd() == "/media/alex/1C5036035035E3E4/0-Studying/English/words-phrases"
-	" execute "set co=999"
-	execute 'so Session.vim'
-	execute "normal \<c-w>="
+if getcwd() == "/home/alex/Storage/0-Studying/English/words-phrases"
+	execute "winpos 0 0"
+	execute "set co=150"
+	execute "colorscheme wwdc17"
+	execute "so Session.vim"
+	execute "normal! \<c-w>="
 endif
 if getcwd() == "/home/alex"
-	let g:netrw_list_hide = '^\..*$'
-	autocmd VimEnter * :NERDTreeToggle
-	execute 'normal \<S-b>'
+    autocmd VimEnter * :NERDTreeToggle
+	execute "normal! \<S-b>"
 endif
 " augroup ProjectDrawer
 "   autocmd!
@@ -143,7 +154,7 @@ endfunction
 function! Grab_block(lines, shift)
 	let lin  = a:lines
 	let shif = a:shift
-	execute "normal ".shif."k".lin."yy".shif."jp"
+	execute "normal ".shif."k".lin."y$".shif."jp=="
 endfunction
 
 fun! Make_class()
@@ -211,7 +222,7 @@ hi SpecialKey ctermfg=darkblue
 
 
 "---mapping
-
+nmap <Leader><Leader><Leader> :!poweroff<cr>
 vmap <C-c> "+y
 vmap <C-v> "+gp
 imap <C-v> <Esc>"+gp
@@ -219,16 +230,15 @@ imap <C-v> <Esc>"+gp
 "+gp doesn't work because C-v does make block visual mode
 nmap ev :tabedit $MYVIMRC <CR>
 nmap ed :w <CR> :source $MYVIMRC<CR> :q<CR>
-
+nmap i3conf :tabedit $HOME/.config/i3/config<CR>
 
 " nmap <Leader>n :Vex <CR> :vertical res 30 <CR>
 " nmap <Leader>1 <C-w>l<S-z><S-z>:vertical res 120% <CR>
 
-"close go next rigt and close left one.
+"close go next right and close left one.
 nmap <Leader>1 <C-w>l:q<CR> 
 nmap <Leader>[ :set co-=35<CR>
 nmap <Leader>] :set co+=35<CR>
-imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
 imap ,, <Esc>
 vmap ,, <Esc>
 "buffer only
@@ -240,35 +250,40 @@ vmap ," d<Esc>i"<C-c>pe
 vmap ,] <S-c>{}<Esc>i<Cr><Esc>pkdd 
 vmap ,) <S-c>()<Esc>i<Cr><Esc>pkdd 
 "making variables
-imap ,mv $<Space>=<Space>//;<Esc>5hi
+imap ,mv $<Space>=<Space>'//';<Esc>7hi
 imap ,ma $arr_<Space>=<Space>[];<Esc><S-f>_a
-imap ,mpp private<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
 imap ,mp public<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
+imap ,mpa public $arr_<Space>=<Space>[];<Esc><S-f>_a
+imap ,mpp private<Space>$<Space>=<Space>'';<Esc>yy<S-f>$a
 imap ,e <Esc><S-a>;<Esc>
+imap <Leader>ec <Esc><S-a>echo"</br>";<Esc>
 "change current dir to opened file dir
 nmap ,ccd :cd %:p:h<CR><CR>
 "fined next appearance of //
 imap ,f <Esc>/\/\/<CR>vlc
 " go to end of line in insert mode
-imap ,ge <Esc><S-a><Space>
+imap ,ge <Esc><S-a>
 "seve buffer
 nmap <c-s> :w<CR>
 imap <c-s> <Esc>:w<CR>
-" save file
-imap ,w (<Esc>lx$phxp
-nmap ,ds <S-%>x<C-o>x   
+" 
+" wrapping
+imap ,w (<Esc>lx$phxph<S-%>a
+vmap ,w x<Esc>i(<Esc>p 
+
 "del pared parentheses"
+nmap ,ds <S-%>x<C-o>x
 " nmap <Leader>z xh/<C-R>-<CR>x<Esc> :noh<CR>bi  
 nmap ,tp :set filetype=php<CR> 
 nmap ,tj :set filetype=javascript<CR> 
 nmap ,th :set filetype=html<CR> 
 "above delete next similar character e.g. "
 nmap vt vf>
+"add the same close tag
 imap <Leader>c <Esc>ya><S-$>p<S-%>a/<Esc>hi<CR><CR><Esc>ki<Tab> 
 map <F5> <Esc>:EnableFastPHPFolds<Cr>
 map <F6> <Esc>:EnablePHPFolds<Cr>
 map <F7> <Esc>:DisablePHPFolds<Cr> 
-"add the same close tab
 " Split management>
 " nnoremap <silent> [b :bprevious<cr>
 " nnoremap <silent> ]b :bnext<cr>
@@ -279,15 +294,23 @@ nmap 2h :exe "vertical resize " . (winwidth(0) - 56)<CR>
 nmap <Tab>l <C-w>l
 nmap <Tab>h <C-w>h
 
+nmap <S-h> :vertical res 1<Cr>
+nmap <S-l> :vertical res 999<Cr>zz
+
+
 "make arrey from block
 vmap <leader>a :s/^/<Tab>'/ \| :'<,'>s/$/',/<CR><S-$>x gvdi$arr = [<CR><Esc>pkddki_
 
 nmap <A-=> :call AdjustFontSize(2)<CR>
 nmap <A--> :call AdjustFontSize(-2)<CR>
-nmap <Leader>g :call Grab_block(1,)<Left>
+imap <Leader>g <Esc>:call Grab_block(1,)<Left>
 nmap ,mc :call Make_class()<Left>
 nnoremap <leader>f :silent execute "grep! -R " . shellescape(expand("<cword>")) . " ."<cr>:copen<cr>
 
+"phpactor
+nmap <Leader>o :call phpactor#GotoDefinition()<CR>
+nmap <Leader>cc :call phpactor#ClassNew()<CR>
+nmap <silent><Leader>ee :call phpactor#ExtractExpression(v:false)<CR>
 
 map <Leader>n :NERDTreeToggle<CR>
 
@@ -299,7 +322,7 @@ au BufNewFile *.php :exe('normal a<?php')
 au BufRead *.html set filetype=html
 
 autocmd FileType python,html,php setlocal foldmethod=indent
-autocmd BufWinEnter *.py colorscheme wwdc17
+autocmd BufWinEnter *.py,*.txt colorscheme wwdc17
 autocmd FileType javascript inoremap cons console.log()<Esc>i
 augroup tagsautocomplit
 	autocmd!
@@ -308,31 +331,37 @@ augroup tagsautocomplit
 	autocmd FileType html inoremap <u <ul<Space>class=""><Esc>o<li></li><Esc>yyo</ul><Esc>k
 	autocmd FileType html inoremap <sel <select<Space>class=""><Esc>o<option value=""></option><Esc>yyo</select><Esc>k
 	autocmd FileType html inoremap <p <p<Space>class=""<Space>id="">//</p><Esc><S-^>f"a
+	autocmd FileType html inoremap <inp <input<Space>class="form-control"<Space>id=""<Space>placeholder=""<Space>value="">
+	autocmd FileType html vmap ,as s<span class=""><Esc>pa</span><Esc><S-f>"i
 augroup END
 
 autocmd FileType php inoremap ,mcf public<Space>function<Space>__construct()<CR>{<CR>}<Esc>ko
 autocmd FileType php inoremap ,mpf private<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
 autocmd FileType php inoremap ,msf public<Space>static<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkf<S-(>i
-autocmd FileType php inoremap ,mf public<Space>function<Space>__n()<CR>{<CR>}<Esc>ko//<Esc>
+autocmd FileType php inoremap ,mf public<Space>function<Space>()<CR>{<CR>}<Esc>ko//<Esc>kkwwi
 autocmd FileType php inoremap $th $this-><C-x><C-o>
 autocmd FileType php inoremap self self::<C-x><C-o>
 autocmd FileType php inoremap -> -><C-x><C-o>
 autocmd FileType php inoremap <?= <?=?><Esc>hi
-autocmd FileType php inoremap if( if(){<CR>}else{<CR>}<Esc><S-o>//<Esc>k<S-o>//<Esc>khha<Space><Space><Esc>i
+autocmd FileType php inoremap if( if(){<CR><CR>}<Esc>kcc//<Esc>khi<Space><Space><Esc>i$
+autocmd FileType php inoremap fore foreach($ as $val){<CR>}<Esc><S-o>//<Esc>kf$a
 
 
-"--- plagins
+"--- plugins
 " Specify a directory for plugins (for Neovim: ~/.local/share/nvim/plugged)
 call plug#begin('~/.vim/plugged')
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'tomtom/tcomment_vim'
-Plug 'phpactor/phpactor', {'for': 'php', 'do': 'composer install'}
+Plug 'phpactor/phpactor', {'for': 'php', 'branch': 'master', 'do': 'composer install --no-dev -o'}
 Plug 'StanAngeloff/php.vim'
 Plug 'jiangmiao/auto-pairs'
 Plug 'jwalton512/vim-blade'
+" Plug 'ctrlpvim/ctrlp' browse through files and folders
+" Plug 'vim-php-namespace' automatically add namespace
 ":PlugInstall
  
 " https://github.com/SirVer/ultisnips
+" snopmane for snipets
 " Initialize plugin system
 call plug#end()
 "linux search
